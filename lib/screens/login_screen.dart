@@ -119,6 +119,10 @@ class _LoginScreenState extends State<LoginScreen> {
       await TokenStorage.saveToken(token);
 
       // ignore: use_build_context_synchronously
+      var user = await ApiService().getUserInfo(context);
+      await TokenStorage.saveUser(user);
+
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => const HomeScreen(initialSection: 'offers')));
     } catch (error) {

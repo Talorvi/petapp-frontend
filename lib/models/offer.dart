@@ -10,8 +10,8 @@ class Offer {
   final DateTime createdAt;
   final DateTime updatedAt;
   final double? averageRating;
-  final User user; // Assuming User model is already defined
-  final String imageUrl = '';
+  final User user;
+  final List<String> images;
 
   Offer({
     required this.id,
@@ -24,6 +24,7 @@ class Offer {
     required this.updatedAt,
     this.averageRating,
     required this.user,
+    required this.images,
   });
 
   factory Offer.fromJson(Map<String, dynamic> json) {
@@ -32,16 +33,15 @@ class Offer {
       userId: json['user_id'] as String,
       title: json['title'] as String,
       description: json['description'] as String,
-      price: json['price'] as String?, // Cast as nullable String
+      price: json['price'] as String?,
       endDate: json['end_date'] == null
           ? null
           : DateTime.parse(json['end_date'] as String),
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
-      averageRating: (json['average_rating'] as num?)
-          ?.toDouble(), // Cast as nullable num, then to Double
-      user: User.fromJson(json['user']
-          as Map<String, dynamic>), // Assuming User has a fromJson method
+      averageRating: (json['average_rating'] as num?)?.toDouble(),
+      user: User.fromJson(json['user'] as Map<String, dynamic>),
+      images: List<String>.from(json['images'] as List),
     );
   }
 
@@ -56,7 +56,8 @@ class Offer {
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
       'average_rating': averageRating,
-      'user': user.toJson(), // Serialize the nested User object
+      'user': user.toJson(),
+      'images': images,
     };
   }
 }

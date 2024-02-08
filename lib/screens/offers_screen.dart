@@ -49,8 +49,10 @@ class _OffersScreenState extends State<OffersScreen>
                   TextField(
                     controller: searchController,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.offersScreen_searchByTextInput,
-                      hintText: AppLocalizations.of(context)!.offersScreen_enterSearchTermHint,
+                      labelText: AppLocalizations.of(context)!
+                          .offersScreen_searchByTextInput,
+                      hintText: AppLocalizations.of(context)!
+                          .offersScreen_enterSearchTermHint,
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.clear),
@@ -64,7 +66,8 @@ class _OffersScreenState extends State<OffersScreen>
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Text(
-                        AppLocalizations.of(context)!.offersScreen_minimumRating,
+                        AppLocalizations.of(context)!
+                            .offersScreen_minimumRating,
                         style: const TextStyle(fontSize: 16),
                       ),
                     ),
@@ -100,23 +103,28 @@ class _OffersScreenState extends State<OffersScreen>
                   const Divider(),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(AppLocalizations.of(context)!.offersScreen_sortBy, style: const TextStyle(fontSize: 16)),
+                    child: Text(
+                        AppLocalizations.of(context)!.offersScreen_sortBy,
+                        style: const TextStyle(fontSize: 16)),
                   ),
                   SegmentedButton<SortOption>(
                     segments: <ButtonSegment<SortOption>>[
                       ButtonSegment<SortOption>(
                         value: SortOption.date,
-                        label: Text(AppLocalizations.of(context)!.offersScreen_date),
+                        label: Text(
+                            AppLocalizations.of(context)!.offersScreen_date),
                         icon: const Icon(Icons.date_range),
                       ),
                       ButtonSegment<SortOption>(
                         value: SortOption.rating,
-                        label: Text(AppLocalizations.of(context)!.offersScreen_rating),
+                        label: Text(
+                            AppLocalizations.of(context)!.offersScreen_rating),
                         icon: const Icon(Icons.star),
                       ),
                       ButtonSegment<SortOption>(
                         value: SortOption.price,
-                        label: Text(AppLocalizations.of(context)!.offersScreen_price),
+                        label: Text(
+                            AppLocalizations.of(context)!.offersScreen_price),
                         icon: const Icon(Icons.attach_money),
                       ),
                     ],
@@ -129,18 +137,22 @@ class _OffersScreenState extends State<OffersScreen>
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(AppLocalizations.of(context)!.offersScreen_order, style: const TextStyle(fontSize: 16)),
+                    child: Text(
+                        AppLocalizations.of(context)!.offersScreen_order,
+                        style: const TextStyle(fontSize: 16)),
                   ),
                   SegmentedButton<OrderOption>(
                     segments: <ButtonSegment<OrderOption>>[
                       ButtonSegment<OrderOption>(
                         value: OrderOption.desc,
-                        label: Text(AppLocalizations.of(context)!.offersScreen_descending),
+                        label: Text(AppLocalizations.of(context)!
+                            .offersScreen_descending),
                         icon: const Icon(Icons.arrow_downward),
                       ),
                       ButtonSegment<OrderOption>(
                         value: OrderOption.asc,
-                        label: Text(AppLocalizations.of(context)!.offersScreen_ascending),
+                        label: Text(AppLocalizations.of(context)!
+                            .offersScreen_ascending),
                         icon: const Icon(Icons.arrow_upward),
                       ),
                     ],
@@ -153,7 +165,8 @@ class _OffersScreenState extends State<OffersScreen>
                   ),
                   const SizedBox(height: 15),
                   ElevatedButton(
-                    child: Text(AppLocalizations.of(context)!.offersScreen_searchButton),
+                    child: Text(AppLocalizations.of(context)!
+                        .offersScreen_searchButton),
                     onPressed: () {
                       setState(() {
                         _searchQuery = searchController.text.isNotEmpty
@@ -250,6 +263,12 @@ class _OffersScreenState extends State<OffersScreen>
           sortBy: _sortBy,
           sortDirection: _sortDirection,
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add your onPressed action here
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

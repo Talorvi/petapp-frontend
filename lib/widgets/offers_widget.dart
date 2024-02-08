@@ -204,9 +204,9 @@ class _OffersWidgetState extends State<OffersWidget> {
             ClipRRect(
               borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(10)), // Match the card's border radius
-              child: offer.imageUrl.isNotEmpty
+              child: offer.images.isNotEmpty
                   ? Image.network(
-                      offer.imageUrl,
+                      offer.images[0],
                       fit: BoxFit.cover,
                       width: double.infinity, // Set width to fill the card
                       height: 200, // Adjust the height as needed
@@ -301,17 +301,17 @@ class _OffersWidgetState extends State<OffersWidget> {
       leading: Container(
         width: 50,
         height: 50,
-        decoration: offer.imageUrl.isNotEmpty
+        decoration: offer.images.isNotEmpty
             ? BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(offer.imageUrl),
+                  image: NetworkImage(offer.images[0]),
                   fit: BoxFit.cover,
                 ),
               )
             : BoxDecoration(
                 color: Colors.grey[300],
               ),
-        child: offer.imageUrl.isEmpty
+        child: offer.images.isEmpty
             ? Icon(Icons.image, size: 30, color: Colors.grey[600])
             : null,
       ),

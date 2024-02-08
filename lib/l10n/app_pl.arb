@@ -52,5 +52,15 @@
   "navigation_messages": "Wiadomości",
   "navigation_profile": "Profil",
 
-  "apiService_avatar_change_successful": "Avatar został pomyślnie zmieniony"
+  "apiService_avatar_change_successful": "Avatar został pomyślnie zmieniony",
+  "apiService_avatar_change_failed": "Nie udało się zmienić avatara",
+  "apiService_avatar_session_expired": "Sesja wygasła. Zaloguj się ponownie",
+
+  "offerDetailScreen_details": "Szczegóły",
+  "offerDetailScreen_reviews": "Oceny",
+  "offerDetailScreen_sendMessage": "Wyślij wiadomość",
+  "offerDetailScreen_editOffer": "Edytuj ofertę",
+
+  "userProfileScreen_title": "Profil",
+  "userProfileScreen_logout": "Wyloguj"
 }

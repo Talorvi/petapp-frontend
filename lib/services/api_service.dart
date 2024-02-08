@@ -18,10 +18,13 @@ class ApiService {
     baseUrl = 'http://$baseAddress:8080/api';
   }
 
-  void logoutUser(BuildContext context) async {
+  void logoutUser(BuildContext context, {bool showToast = true}) async {
     await TokenStorage.deleteToken();
+    await TokenStorage.deleteUser();
 
-    showErrorToast('Session expired. Please log in again.');
+    if (showToast) {
+      showErrorToast('Session expired. Please log in again.');
+    }
 
     // Navigating to the HomeScreen and refreshing the state
     // ignore: use_build_context_synchronously

@@ -52,5 +52,15 @@
   "navigation_messages": "Messages",
   "navigation_profile": "Profile",
 
-  "apiService_avatar_change_successful": "Avatar changed successfully"
+  "apiService_avatar_change_successful": "Avatar changed successfully",
+  "apiService_avatar_change_failed": "Failed to change avatar",
+  "apiService_avatar_session_expired": "Session expired, please log in again",
+
+  "offerDetailScreen_details": "Details",
+  "offerDetailScreen_reviews": "Reviews",
+  "offerDetailScreen_sendMessage": "Send message",
+  "offerDetailScreen_editOffer": "Edit offer",
+
+  "userProfileScreen_title": "Profile",
+  "userProfileScreen_logout": "Logout"
 }

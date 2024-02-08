@@ -12,7 +12,8 @@ class UserProfileScreen extends StatefulWidget {
   _UserProfileScreenState createState() => _UserProfileScreenState();
 }
 
-class _UserProfileScreenState extends State<UserProfileScreen> {
+class _UserProfileScreenState extends State<UserProfileScreen>
+    with AutomaticKeepAliveClientMixin {
   User? user;
   final ImagePicker _picker = ImagePicker();
   bool _isUploading = true;
@@ -65,7 +66,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     ApiService().currentLocale = Localizations.localeOf(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Profile'),
+        title: Text(AppLocalizations.of(context)!.userProfileScreen_title),
       ),
       body: user == null
           ? const Center(child: CircularProgressIndicator())
@@ -148,10 +149,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   const SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () {
-                      ApiService()
-                          .logoutUser(context); // Implement logout logic
+                      ApiService().logoutUser(context, showToast: false);
                     },
-                    child: const Text('Logout'),
+                    child: Text(
+                        AppLocalizations.of(context)!.userProfileScreen_logout),
                   ),
                   // Add more widgets here as per your requirement
                 ],
@@ -159,4 +160,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
     );
   }
+
+  @override
+  bool get wantKeepAlive =>
+      true; // Keep state alive for AutomaticKeepAliveClientMixin
 }
