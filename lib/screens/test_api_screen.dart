@@ -107,6 +107,7 @@ class _TestApiScreenState extends State<TestApiScreen> with AutomaticKeepAliveCl
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Test API'),
@@ -155,6 +156,7 @@ class _TestApiScreenState extends State<TestApiScreen> with AutomaticKeepAliveCl
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold), // Text styling
                           ),
+                          // ignore: unnecessary_null_comparison
                           subtitle: _users[index].createdAt != null
                               ? Text(
                                   DateFormat('dd-MM-yyyy kk:mm')

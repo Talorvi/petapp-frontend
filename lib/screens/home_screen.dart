@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> get _pages => [
     const OffersScreen(),
     const TestApiScreen(),
-    _isLoggedIn ? UserProfileScreen() : const LoginScreen(),
+    _isLoggedIn ? const UserProfileScreen() : const LoginScreen(),
   ];
 
   @override

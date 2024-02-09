@@ -52,6 +52,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
         });
         // ignore: use_build_context_synchronously
         ApiService.showSuccessToast(
+            // ignore: use_build_context_synchronously
             AppLocalizations.of(context)!.apiService_avatar_change_successful);
       } catch (exception) {
         setState(() {
@@ -63,6 +64,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     ApiService().currentLocale = Localizations.localeOf(context);
     return Scaffold(
       appBar: AppBar(

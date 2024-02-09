@@ -148,7 +148,7 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
                     Expanded(
                       child: Text(
                         widget.offer.title.toUpperCase(),
-                        style: Theme.of(context).textTheme.headline5,
+                        style: Theme.of(context).textTheme.headlineSmall,
                         overflow: TextOverflow.visible,
                       ),
                     ),
@@ -174,7 +174,7 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
                 const Divider(),
                 Text(
                   widget.offer.description,
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const Divider(),
                 _buildUserProfileSection(widget.offer),

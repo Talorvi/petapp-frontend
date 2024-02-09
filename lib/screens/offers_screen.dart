@@ -30,8 +30,6 @@ class _OffersScreenState extends State<OffersScreen>
   OrderOption _selectedOrder = OrderOption.desc;
 
   void _showAdvancedSearch(BuildContext context) {
-    Future<void> selectDate(
-        BuildContext context, StateSetter setState, bool isFromDate) async {}
 
     showModalBottomSheet(
       isScrollControlled: true,
