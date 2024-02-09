@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:petapp/models/offer.dart';
+import 'package:petapp/screens/offer/edit_offer_screen.dart';
 import 'package:petapp/screens/profile/profile_screen.dart';
 import 'package:petapp/services/api_service.dart';
 import 'package:petapp/storage/token_storage.dart';
@@ -11,10 +12,11 @@ import 'package:petapp/widgets/offers_widget.dart';
 import 'package:petapp/widgets/user_profile_section.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// ignore: must_be_immutable
 class OfferDetailScreen extends StatefulWidget {
-  final Offer offer;
+  Offer offer; // Make it non-final
 
-  const OfferDetailScreen({super.key, required this.offer});
+  OfferDetailScreen({super.key, required this.offer});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -67,6 +69,20 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> fetchUpdatedOffer() async {
+    try {
+      // Assuming ApiService has a method to fetch a single offer by ID
+      Offer updatedOffer = await ApiService().getOfferById(widget.offer.id);
+      setState(() {
+        widget.offer =
+            updatedOffer; // Update the offer object with the fetched one
+      });
+    } catch (error) {
+      // Handle any errors, such as showing a message to the user
+      print("Error fetching updated offer: $error");
+    }
   }
 
   Widget _buildOfferDetailsTab(BuildContext context) {
@@ -260,8 +276,20 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           ElevatedButton(
-            onPressed: () {
-              // TODO: Implementation for editing the offer
+            onPressed: () async {
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditOfferScreen(
+                            offer: widget.offer,
+                          )));
+              // Refresh the offers list after editing the offer
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (_offersWidgetKey.currentState != null) {
+                  _offersWidgetKey.currentState!.refreshOffers();
+                }
+              });
+              fetchUpdatedOffer(); 
             },
             child:
                 Text(AppLocalizations.of(context)!.offerDetailScreen_editOffer),

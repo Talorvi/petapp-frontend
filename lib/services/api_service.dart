@@ -163,6 +163,30 @@ class ApiService {
     }
   }
 
+  Future<Offer> getOfferById(String offerId) async {
+    String url = '$baseUrl/offers/$offerId';
+    String? token = await TokenStorage.getToken();
+
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': token != null ? 'Bearer $token' : '',
+        'Content-Type': 'application/json',
+        'Accept-Language': _getLocale(),
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Parse the JSON response and return an Offer object
+      return Offer.fromJson(jsonDecode(response.body));
+    } else {
+      // Handle errors or invalid response
+      var responseBody = jsonDecode(response.body);
+      String errorMessage = _extractErrorMessage(responseBody);
+      throw Exception('Failed to fetch offer. Error: $errorMessage');
+    }
+  }
+
   Future<User> getUserInfo(BuildContext context, {String? userId}) async {
     String url;
     if (userId != null) {
@@ -289,6 +313,56 @@ class ApiService {
       showErrorToast(errorMessage);
       throw Exception(
           'Failed to delete offer. Status code: ${response.statusCode}');
+    }
+  }
+
+  Future<void> updateOffer(String offerId, String title, String description,
+      {String? price}) async {
+    String url = '$baseUrl/offers/$offerId';
+    String? token = await TokenStorage.getToken();
+
+    var response = await http.put(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'Accept-Language': _getLocale(),
+      },
+      body: jsonEncode({
+        'title': title,
+        'description': description,
+        // Include 'price' if it's part of your offer model
+        if (price != null) 'price': price,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update offer');
+    }
+  }
+
+  Future<void> deleteOfferImage(String offerId, String imageName) async {
+    String url = '$baseUrl/offers/$offerId/images/$imageName';
+    String? token = await TokenStorage.getToken();
+
+    var response = await http.delete(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'Accept-Language': _getLocale(),
+      },
+    );
+
+    if (response.statusCode != 204) {
+      // Assuming 204 No Content for successful deletion
+      var responseBody = jsonDecode(response.body);
+      String errorMessage = _extractErrorMessage(responseBody);
+      showErrorToast(errorMessage);
+      throw Exception(
+          'Failed to delete image. Status code: ${response.statusCode}');
+    } else {
+      showSuccessToast('Image deleted successfully');
     }
   }
 

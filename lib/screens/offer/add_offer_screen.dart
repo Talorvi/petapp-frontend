@@ -48,9 +48,14 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                     child: const Text('Back'),
                   ),
                 const SizedBox(width: 8),
-                if (_isSubmitting)
-                  const CircularProgressIndicator()
-                else
+                if (isLastStep)
+                  ElevatedButton.icon(
+                    onPressed: _pickImage,
+                    icon: const Icon(Icons.add_photo_alternate),
+                    label: const Text('Add Image'),
+                  ),
+                const SizedBox(width: 8),
+                if (!_isSubmitting)
                   ElevatedButton(
                     onPressed: details.onStepContinue,
                     child: Text(isLastStep ? 'Finish' : 'Next'),
@@ -160,11 +165,6 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                     ),
                   ],
                 );
-              } else {
-                return IconButton(
-                  icon: const Icon(Icons.add_photo_alternate_outlined),
-                  onPressed: _imageFiles.length < 10 ? _pickImage : null,
-                );
               }
             },
           ),
@@ -240,8 +240,8 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
           });
         }
       } else {
-        Navigator.of(context)
-            .pop(true); // Close the screen if no images to upload or finished uploading
+        Navigator.of(context).pop(
+            true); // Close the screen if no images to upload or finished uploading
       }
     }
   }
