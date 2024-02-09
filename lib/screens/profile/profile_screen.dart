@@ -96,7 +96,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: selectedSegment == 'Offers'
                   ? OffersWidget(
                       user: widget.user,
-                      isListView: true,
+                      isListView: true, 
+                      widgetKey: null,
                     )
                   : ReviewsWidget(
                       user: widget.user,

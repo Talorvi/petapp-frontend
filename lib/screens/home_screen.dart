@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:petapp/screens/login_screen.dart';
-import 'package:petapp/screens/offers_screen.dart';
-import 'package:petapp/screens/test_api_screen.dart';
+import 'package:petapp/screens/auth/login_screen.dart';
+import 'package:petapp/screens/messages/messages_screen.dart';
+import 'package:petapp/screens/offer/offers_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:petapp/screens/user_profile_screen.dart';
+import 'package:petapp/screens/profile/user_profile_screen.dart';
 import 'package:petapp/storage/token_storage.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> get _pages => [
     const OffersScreen(),
-    const TestApiScreen(),
+    const MessagesScreen(),
     _isLoggedIn ? const UserProfileScreen() : const LoginScreen(),
   ];
 

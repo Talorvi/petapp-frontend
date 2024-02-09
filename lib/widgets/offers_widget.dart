@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:petapp/models/user.dart';
 import 'package:petapp/models/offer.dart';
-import 'package:petapp/screens/offer_detail_screen.dart';
+import 'package:petapp/screens/offer/offer_detail_screen.dart';
 import 'package:petapp/services/api_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:petapp/widgets/user_profile_section.dart';
@@ -32,15 +32,16 @@ class OffersWidget extends StatefulWidget {
     this.toDate,
     this.sortBy,
     this.sortDirection,
-    this.onSearchUpdated,
+    this.onSearchUpdated, 
+    required GlobalKey<OffersWidgetState>? widgetKey,
   });
 
   @override
   // ignore: library_private_types_in_public_api
-  _OffersWidgetState createState() => _OffersWidgetState();
+  OffersWidgetState createState() => OffersWidgetState();
 }
 
-class _OffersWidgetState extends State<OffersWidget> {
+class OffersWidgetState extends State<OffersWidget> {
   final ApiService _apiService = ApiService();
   final List<Offer> _offers = [];
   bool _isLoading = false;
@@ -67,6 +68,10 @@ class _OffersWidgetState extends State<OffersWidget> {
         _scrollController.position.maxScrollExtent) {
       _fetchMoreOffers();
     }
+  }
+
+  void refreshOffers() {
+    _fetchOffers();
   }
 
   Future<void> _fetchOffers({

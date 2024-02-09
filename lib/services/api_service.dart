@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:petapp/models/offer.dart';
 import 'package:petapp/models/user.dart';
 import 'package:petapp/screens/home_screen.dart';
@@ -144,6 +145,7 @@ class ApiService {
                 return Offer.fromJson(item);
               } catch (e) {
                 // Handle the error or log it
+                // ignore: avoid_print
                 print('Error parsing offer: $e');
                 return null;
               }
@@ -214,6 +216,53 @@ class ApiService {
       showErrorToast(errorMessage);
       throw Exception(
           'Failed to upload avatar. Status code: ${response.statusCode}');
+    }
+  }
+
+  Future<Offer> createOffer(
+      String title, String description, String? price) async {
+    var url = Uri.parse('$baseUrl/offers');
+    var token = await TokenStorage.getToken();
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Accept-Language': _getLocale(),
+      },
+      body: jsonEncode({
+        'title': title,
+        'description': description,
+        'price': price,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      return Offer.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to create offer');
+    }
+  }
+
+  Future<void> uploadOfferImages(String offerId, List<XFile> images) async {
+    var url = Uri.parse('$baseUrl/offers/$offerId/images');
+    var token = await TokenStorage.getToken();
+    var request = http.MultipartRequest('POST', url)
+      ..headers.addAll({
+        'Authorization': 'Bearer $token',
+        'Accept-Language': _getLocale(),
+      });
+
+    for (var image in images) {
+      request.files
+          .add(await http.MultipartFile.fromPath('images[]', image.path));
+    }
+
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to upload images');
     }
   }
 

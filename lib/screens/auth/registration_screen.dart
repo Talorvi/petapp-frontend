@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:petapp/screens/login_screen.dart';
+import 'package:petapp/screens/auth/login_screen.dart';
 import 'package:petapp/services/api_service.dart';
 import 'package:petapp/services/dialog_service.dart';
 

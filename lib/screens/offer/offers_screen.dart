@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:petapp/enums/order_option.dart';
 import 'package:petapp/enums/sort_option.dart';
 import 'package:petapp/models/user.dart';
-import 'package:petapp/screens/profile_screen.dart';
-import 'package:petapp/widgets/offers_widget.dart'; // Import the OffersWidget
+import 'package:petapp/screens/profile/profile_screen.dart';
+import 'package:petapp/widgets/offers_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OffersScreen extends StatefulWidget {
@@ -19,6 +19,8 @@ class OffersScreen extends StatefulWidget {
 
 class _OffersScreenState extends State<OffersScreen>
     with AutomaticKeepAliveClientMixin {
+  final GlobalKey<OffersWidgetState> _offersWidgetKey =
+      GlobalKey<OffersWidgetState>();
   String? _searchQuery;
   double? _minimumRating;
   String? _sortBy;
@@ -29,8 +31,16 @@ class _OffersScreenState extends State<OffersScreen>
   SortOption _selectedSort = SortOption.date;
   OrderOption _selectedOrder = OrderOption.desc;
 
-  void _showAdvancedSearch(BuildContext context) {
+void navigateToAddOfferScreen() async {
+  _refreshOffers();
+}
 
+void _refreshOffers() {
+  // Assuming OffersWidget takes a key or you can directly call a method to refresh
+  _offersWidgetKey.currentState?.refreshOffers();
+}
+
+  void _showAdvancedSearch(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
       enableDrag: true,
@@ -236,6 +246,8 @@ class _OffersScreenState extends State<OffersScreen>
         padding: const EdgeInsets.only(
             left: 8.0, right: 8.0), // Increased bottom padding
         child: OffersWidget(
+          key: _offersWidgetKey,
+          widgetKey: _offersWidgetKey,
           user: null,
           onProfileTap: (User user) {
             // Navigate to the profile screen
@@ -263,9 +275,7 @@ class _OffersScreenState extends State<OffersScreen>
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add your onPressed action here
-        },
+        onPressed: navigateToAddOfferScreen,
         child: const Icon(Icons.add),
       ),
     );

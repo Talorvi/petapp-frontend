@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:petapp/models/offer.dart';
-import 'package:petapp/screens/profile_screen.dart';
+import 'package:petapp/screens/profile/profile_screen.dart';
 import 'package:petapp/storage/token_storage.dart';
 import 'package:petapp/widgets/user_profile_section.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

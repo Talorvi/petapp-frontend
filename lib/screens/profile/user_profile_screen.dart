@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:petapp/models/user.dart'; // Assuming this is the path to your User model
-import 'package:petapp/services/api_service.dart'; // Assuming this is the path to your API service
+import 'package:petapp/models/user.dart'; 
+import 'package:petapp/services/api_service.dart'; 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserProfileScreen extends StatefulWidget {
