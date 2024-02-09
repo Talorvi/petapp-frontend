@@ -60,6 +60,12 @@
   "offerDetailScreen_reviews": "Oceny",
   "offerDetailScreen_sendMessage": "Wyślij wiadomość",
   "offerDetailScreen_editOffer": "Edytuj ofertę",
+  "offerDetailScreen_removeOffer": "Usuń ofertę",
+  "offerDetailScreen_removeOfferDialogTitle": "Usuń ofertę",
+  "offerDetailScreen_removeOfferDialogMessage": "Czy na pewno chcesz usunąć tę ofertę?",
+  "offerDetailScreen_cancel": "Anuluj",
+  "offerDetailScreen_confirm": "Potwierdź",
+  "offerDetailScreen_cancelOfferError": "Nie udało się usunąć oferty. Spróbuj ponownie",
 
   "userProfileScreen_title": "Profil",
   "userProfileScreen_logout": "Wyloguj"

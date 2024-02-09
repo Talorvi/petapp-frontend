@@ -1,9 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:petapp/models/offer.dart';
 import 'package:petapp/screens/profile/profile_screen.dart';
+import 'package:petapp/services/api_service.dart';
 import 'package:petapp/storage/token_storage.dart';
+import 'package:petapp/widgets/offers_widget.dart';
 import 'package:petapp/widgets/user_profile_section.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -18,6 +22,8 @@ class OfferDetailScreen extends StatefulWidget {
 }
 
 class _OfferDetailScreenState extends State<OfferDetailScreen> {
+  final GlobalKey<OffersWidgetState> _offersWidgetKey =
+      GlobalKey<OffersWidgetState>();
   String? _loggedInUserId;
   final CarouselController _carouselController = CarouselController();
   int _currentCarouselPage = 0;
@@ -75,6 +81,7 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
                       carouselController: _carouselController,
                       options: CarouselOptions(
                         height: 250.0,
+                        enableInfiniteScroll: false,
                         enlargeCenterPage: true,
                         onPageChanged: (index, reason) {
                           setState(() {
@@ -90,7 +97,8 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
                               onTap: () => _openImageFullscreen(imageUrl),
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
-                                margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
                                 decoration: BoxDecoration(
                                   color: Colors.grey[300],
                                 ),
@@ -226,40 +234,116 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
     // Check if the logged-in user is the owner of the offer
     bool isOwner = _loggedInUserId == widget.offer.user.id.toString();
 
-    // Owner's view: Show Edit Offer button
+    // Function to show a loading indicator
+    void showLoadingDialog() {
+      showDialog(
+        context: context,
+        barrierDismissible: false, // User must tap button to dismiss
+        builder: (BuildContext context) {
+          return const AlertDialog(
+            content: Row(
+              children: [
+                CircularProgressIndicator(),
+                Padding(
+                  padding: EdgeInsets.only(left: 16),
+                  child: Text('Removing offer...'),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
     if (isOwner) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           ElevatedButton(
             onPressed: () {
-              // Implementation for editing the offer
+              // TODO: Implementation for editing the offer
             },
             child:
                 Text(AppLocalizations.of(context)!.offerDetailScreen_editOffer),
           ),
+          ElevatedButton(
+            onPressed: () async {
+              // Confirm dialog before removing the offer
+              bool confirm = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(AppLocalizations.of(context)!
+                            .offerDetailScreen_removeOfferDialogTitle),
+                        content: Text(AppLocalizations.of(context)!
+                            .offerDetailScreen_removeOfferDialogMessage),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: Text(AppLocalizations.of(context)!
+                                .offerDetailScreen_cancel),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            style: TextButton.styleFrom(
+                                foregroundColor: Colors.red),
+                            child: Text(AppLocalizations.of(context)!
+                                .offerDetailScreen_confirm),
+                          ),
+                        ],
+                      );
+                    },
+                  ) ??
+                  false;
+
+              if (confirm) {
+                showLoadingDialog(); // Show loading dialog
+                try {
+                  // Call API to delete the offer
+                  await ApiService().deleteOffer(widget.offer.id);
+                  Navigator.of(context).pop(); // Dismiss the loading dialog
+                  Navigator.of(context)
+                      .pop(); // Close the detail screen and signal success
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (_offersWidgetKey.currentState != null) {
+                      _offersWidgetKey.currentState!.refreshOffers();
+                    }
+                  });
+                } catch (e) {
+                  Navigator.of(context)
+                      .pop(); // Ensure loading dialog is dismissed on error
+                  // Show error message
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(AppLocalizations.of(context)!
+                          .offerDetailScreen_cancelOfferError)));
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: Text(
+                AppLocalizations.of(context)!.offerDetailScreen_removeOffer,
+                style: const TextStyle(color: Colors.white)),
+          ),
         ],
       );
-    }
-
-    // Viewer's view: Show Send Message button if the user is logged in and not the owner
-    else if (_loggedInUserId != null) {
+    } else if (_loggedInUserId != null) {
+      // Viewer's view: Show Send Message button if the user is logged in and not the owner
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           ElevatedButton(
             onPressed: () {
-              // Implementation for contacting the seller
+              // TODO: Implementation for contacting the seller
             },
             child: Text(
                 AppLocalizations.of(context)!.offerDetailScreen_sendMessage),
           ),
         ],
       );
+    } else {
+      // Return an empty Container if none of the conditions are met (e.g., not logged in)
+      return Container();
     }
-
-    // Return an empty Container if none of the conditions are met (e.g., not logged in)
-    return Container();
   }
 
   void _openImageFullscreen(String imageUrl) {
@@ -268,7 +352,7 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
         builder: (_) => Scaffold(
           backgroundColor: Colors.black,
           appBar: AppBar(
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.white,
             elevation: 0,
           ),
           body: Center(

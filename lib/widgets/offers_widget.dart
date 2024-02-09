@@ -32,7 +32,7 @@ class OffersWidget extends StatefulWidget {
     this.toDate,
     this.sortBy,
     this.sortDirection,
-    this.onSearchUpdated, 
+    this.onSearchUpdated,
     required GlobalKey<OffersWidgetState>? widgetKey,
   });
 
@@ -198,10 +198,14 @@ class OffersWidgetState extends State<OffersWidget> {
             BorderRadius.circular(10), // Set the border radius of the card
       ),
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           // Action for tapping the whole card
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => OfferDetailScreen(offer: offer)));
+          await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => OfferDetailScreen(offer: offer)));
+
+          refreshOffers();
         },
         child: Column(
           children: <Widget>[
@@ -338,11 +342,13 @@ class OffersWidgetState extends State<OffersWidget> {
             children: [
               Text(
                 DateFormat('dd-MM-yyyy – kk:mm').format(offer.updatedAt),
-                style: const TextStyle(fontSize: 12, color: Color.fromARGB(119, 3, 168, 244)),
+                style: const TextStyle(
+                    fontSize: 12, color: Color.fromARGB(119, 3, 168, 244)),
               ),
               if (offer.user.averageOfferRating != null) ...[
                 const SizedBox(width: 5),
-                const Icon(Icons.star, size: 16, color: Color.fromARGB(119, 3, 168, 244)),
+                const Icon(Icons.star,
+                    size: 16, color: Color.fromARGB(119, 3, 168, 244)),
                 Text(
                   ' ${offer.user.averageOfferRating!.toStringAsFixed(1)}',
                   style: const TextStyle(fontSize: 12),
@@ -360,10 +366,12 @@ class OffersWidgetState extends State<OffersWidget> {
           fontWeight: FontWeight.bold,
         ),
       ),
-      onTap: () {
+      onTap: () async {
         // Action for tapping the list item
-        Navigator.of(context).push(
+        await Navigator.push(context,
             MaterialPageRoute(builder: (_) => OfferDetailScreen(offer: offer)));
+
+        refreshOffers();
       },
     );
   }

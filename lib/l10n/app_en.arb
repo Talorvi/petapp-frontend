@@ -60,6 +60,12 @@
   "offerDetailScreen_reviews": "Reviews",
   "offerDetailScreen_sendMessage": "Send message",
   "offerDetailScreen_editOffer": "Edit offer",
+  "offerDetailScreen_removeOffer": "Remove offer",
+  "offerDetailScreen_removeOfferDialogTitle": "Remove offer",
+  "offerDetailScreen_removeOfferDialogMessage": "Are you sure you want to remove this offer?",
+  "offerDetailScreen_cancel": "Cancel",
+  "offerDetailScreen_confirm": "Confirm",
+  "offerDetailScreen_cancelOfferError": "Failed to cancel offer. Please try again",
 
   "userProfileScreen_title": "Profile",
   "userProfileScreen_logout": "Logout"

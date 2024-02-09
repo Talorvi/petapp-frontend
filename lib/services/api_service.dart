@@ -266,6 +266,32 @@ class ApiService {
     }
   }
 
+  Future<void> deleteOffer(String offerId) async {
+    String url = '$baseUrl/offers/$offerId';
+    String? token = await TokenStorage.getToken();
+
+    var response = await http.delete(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'Accept-Language': _getLocale(),
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      // Successfully deleted the offer
+      showSuccessToast('Offer deleted successfully');
+    } else {
+      // Failed to delete the offer
+      var responseBody = jsonDecode(response.body);
+      String errorMessage = _extractErrorMessage(responseBody);
+      showErrorToast(errorMessage);
+      throw Exception(
+          'Failed to delete offer. Status code: ${response.statusCode}');
+    }
+  }
+
   String _getLocale() {
     return currentLocale?.toLanguageTag() ?? 'en';
   }
