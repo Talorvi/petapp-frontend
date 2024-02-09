@@ -338,11 +338,11 @@ class OffersWidgetState extends State<OffersWidget> {
             children: [
               Text(
                 DateFormat('dd-MM-yyyy – kk:mm').format(offer.updatedAt),
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
+                style: const TextStyle(fontSize: 12, color: Color.fromARGB(119, 3, 168, 244)),
               ),
               if (offer.user.averageOfferRating != null) ...[
                 const SizedBox(width: 5),
-                const Icon(Icons.star, size: 16, color: Colors.amber),
+                const Icon(Icons.star, size: 16, color: Color.fromARGB(119, 3, 168, 244)),
                 Text(
                   ' ${offer.user.averageOfferRating!.toStringAsFixed(1)}',
                   style: const TextStyle(fontSize: 12),

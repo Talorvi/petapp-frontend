@@ -167,7 +167,7 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
                     int rating = widget.offer.averageRating?.round() ?? 0;
                     return Icon(
                       index < rating ? Icons.star : Icons.star_border,
-                      color: Colors.amber,
+                      color: const Color.fromARGB(119, 3, 168, 244),
                     );
                   }),
                 ),
