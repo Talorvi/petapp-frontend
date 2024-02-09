@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:petapp/enums/order_option.dart';
 import 'package:petapp/enums/sort_option.dart';
 import 'package:petapp/models/user.dart';
+import 'package:petapp/screens/offer/add_offer_screen.dart';
 import 'package:petapp/screens/profile/profile_screen.dart';
 import 'package:petapp/widgets/offers_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -31,14 +32,19 @@ class _OffersScreenState extends State<OffersScreen>
   SortOption _selectedSort = SortOption.date;
   OrderOption _selectedOrder = OrderOption.desc;
 
-void navigateToAddOfferScreen() async {
-  _refreshOffers();
-}
+  void navigateToAddOfferScreen() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddOfferScreen()),
+    );
 
-void _refreshOffers() {
-  // Assuming OffersWidget takes a key or you can directly call a method to refresh
-  _offersWidgetKey.currentState?.refreshOffers();
-}
+    // Make sure this is called when the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_offersWidgetKey.currentState != null) {
+        _offersWidgetKey.currentState!.refreshOffers();
+      }
+    });
+  }
 
   void _showAdvancedSearch(BuildContext context) {
     showModalBottomSheet(
