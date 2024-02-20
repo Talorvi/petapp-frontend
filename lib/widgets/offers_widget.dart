@@ -71,7 +71,12 @@ class OffersWidgetState extends State<OffersWidget> {
   }
 
   void refreshOffers() {
-    _fetchOffers();
+    _fetchOffers(
+      query: widget.query,
+      minimumRating: widget.minimumRating,
+      sortBy: widget.sortBy,
+      sortDirection: widget.sortDirection,
+    );
   }
 
   Future<void> _fetchOffers({
