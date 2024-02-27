@@ -21,7 +21,7 @@ class User {
       name: json['name'] as String,
       email: json['email'] as String,
       avatarUrl: json['avatar_url'] as String?,
-      averageOfferRating: json['average_offer_rating'] as double?,
+      averageOfferRating: json['average_offer_rating'] != null ? double.tryParse(json['average_offer_rating']) : null,
       createdAt: DateTime.parse(json['created_at']),
     );
   }

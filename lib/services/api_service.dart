@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:petapp/models/offer.dart';
+import 'package:petapp/models/rating.dart';
 import 'package:petapp/models/user.dart';
 import 'package:petapp/screens/home_screen.dart';
 import 'package:petapp/storage/token_storage.dart';
@@ -124,7 +125,8 @@ class ApiService {
       if (query != null) 'query': query,
       if (userId != null) 'user_id': userId,
       if (minimumRating != null) 'minimum_rating': minimumRating.toString(),
-      if (sortBy != null && ['date', 'rating', 'price'].contains(sortBy))
+      if (sortBy != null &&
+          ['date', 'average_rating', 'price'].contains(sortBy))
         'sort_by': sortBy,
       if (sortDirection != null) 'sort_direction': sortDirection,
     };
@@ -363,6 +365,109 @@ class ApiService {
           'Failed to delete image. Status code: ${response.statusCode}');
     } else {
       showSuccessToast('Image deleted successfully');
+    }
+  }
+
+  Future<List<Rating>> getRatingsByOfferId(String offerId) async {
+    String url = '$baseUrl/offers/$offerId/ratings';
+    String? token = await TokenStorage.getToken();
+
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': token != null ? 'Bearer $token' : '',
+        'Content-Type': 'application/json',
+        'Accept-Language': _getLocale(),
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> ratingsJson = jsonDecode(response.body);
+      List<Rating> ratings =
+          ratingsJson.map((json) => Rating.fromJson(json)).toList();
+      return ratings;
+    } else {
+      // Handle errors or invalid response
+      var responseBody = jsonDecode(response.body);
+      String errorMessage = _extractErrorMessage(responseBody);
+      throw Exception('Failed to fetch ratings. Error: $errorMessage');
+    }
+  }
+
+  Future<Rating> createReview(String offerId, double rating,
+      {String? review}) async {
+    String url = '$baseUrl/offers/$offerId/ratings';
+    String? token = await TokenStorage.getToken();
+
+    var response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'Accept-Language': _getLocale(),
+      },
+      body: jsonEncode({
+        'rating': rating,
+        if (review != null) 'review': review,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      return Rating.fromJson(jsonDecode(response.body));
+    } else {
+      var responseBody = jsonDecode(response.body);
+      String errorMessage = _extractErrorMessage(responseBody);
+      showErrorToast(errorMessage);
+      throw Exception('Failed to create review. Error: $errorMessage');
+    }
+  }
+
+  Future<void> updateReview(String ratingId, double rating,
+      {String? review}) async {
+    String url = '$baseUrl/ratings/$ratingId';
+    String? token = await TokenStorage.getToken();
+
+    var response = await http.put(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'Accept-Language': _getLocale(),
+      },
+      body: jsonEncode({
+        'rating': rating,
+        if (review != null) 'review': review,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      var responseBody = jsonDecode(response.body);
+      String errorMessage = _extractErrorMessage(responseBody);
+      showErrorToast(errorMessage);
+      throw Exception('Failed to update review. Error: $errorMessage');
+    }
+  }
+
+  Future<void> deleteReview(String ratingId) async {
+    String url = '$baseUrl/ratings/$ratingId';
+    String? token = await TokenStorage.getToken();
+
+    var response = await http.delete(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'Accept-Language': _getLocale(),
+      },
+    );
+
+    if (response.statusCode != 204) {
+      // Assuming 204 is the status code for successful deletion
+      var responseBody = jsonDecode(response.body);
+      String errorMessage = _extractErrorMessage(responseBody);
+      showErrorToast(errorMessage);
+      throw Exception(
+          'Failed to delete review. Status code: ${response.statusCode}');
     }
   }
 

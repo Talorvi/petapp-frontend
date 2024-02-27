@@ -205,12 +205,14 @@ class OffersWidgetState extends State<OffersWidget> {
       child: InkWell(
         onTap: () async {
           // Action for tapping the whole card
-          await Navigator.push(
+          var result = await Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (_) => OfferDetailScreen(offer: offer)));
 
-          refreshOffers();
+          if (result) {
+            refreshOffers();
+          }
         },
         child: Column(
           children: <Widget>[
@@ -373,10 +375,12 @@ class OffersWidgetState extends State<OffersWidget> {
       ),
       onTap: () async {
         // Action for tapping the list item
-        await Navigator.push(context,
+        var result = await Navigator.push(context,
             MaterialPageRoute(builder: (_) => OfferDetailScreen(offer: offer)));
 
-        refreshOffers();
+        if (result) {
+          refreshOffers();
+        }
       },
     );
   }

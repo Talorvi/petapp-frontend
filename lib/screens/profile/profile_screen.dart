@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petapp/models/user.dart';
 import 'package:petapp/widgets/offers_widget.dart';
-import 'package:petapp/widgets/reviews_widget.dart';
+import 'package:petapp/widgets/user_reviews_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
   final User user;
@@ -99,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       isListView: true, 
                       widgetKey: null,
                     )
-                  : ReviewsWidget(
+                  : UserReviewsWidget(
                       user: widget.user,
                     ),
             ),

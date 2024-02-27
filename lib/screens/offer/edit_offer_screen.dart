@@ -22,6 +22,7 @@ class _EditOfferScreenState extends State<EditOfferScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isSubmitting = false;
   final ApiService _apiService = ApiService();
+  bool _changesMade = false;
 
   @override
   void initState() {
@@ -55,6 +56,7 @@ class _EditOfferScreenState extends State<EditOfferScreen> {
       await _apiService.deleteOfferImage(widget.offer.id, imageName);
       setState(() {
         _existingImageUrls.remove(imageUrl);
+        _changesMade = true;
       });
     } catch (e) {
       _showErrorDialog('Failed to delete image: $e');
@@ -80,8 +82,10 @@ class _EditOfferScreenState extends State<EditOfferScreen> {
           await _apiService.uploadOfferImages(widget.offer.id, _newImageFiles);
         }
 
+        _changesMade = true;
+
         // ignore: use_build_context_synchronously
-        Navigator.pop(context, true); // Indicate success and go back
+        Navigator.pop(context, _changesMade); // Indicate success and go back
       } catch (e) {
         _showErrorDialog(e.toString());
       } finally {
@@ -111,6 +115,14 @@ class _EditOfferScreenState extends State<EditOfferScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Offer'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            // Custom back button action
+            Navigator.pop(context,
+                _changesMade); // Pop with a flag indicating the need to refresh
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

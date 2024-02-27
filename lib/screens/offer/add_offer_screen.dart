@@ -241,7 +241,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
         }
       } else {
         Navigator.of(context).pop(
-            true); // Close the screen if no images to upload or finished uploading
+            false); // Close the screen if no images to upload or finished uploading
       }
     }
   }
@@ -278,7 +278,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
-              Navigator.of(context).pop(); // Close the AddOfferScreen
+              Navigator.of(context).pop(true); // Close the AddOfferScreen
             },
             child: const Text('OK'),
           ),

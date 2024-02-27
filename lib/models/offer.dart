@@ -39,7 +39,7 @@ class Offer {
           : DateTime.parse(json['end_date'] as String),
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
-      averageRating: (json['average_rating'] as num?)?.toDouble(),
+      averageRating: json['average_rating'] != null ? double.tryParse(json['average_rating']) : null,
       user: User.fromJson(json['user'] as Map<String, dynamic>),
       images: List<String>.from(json['images'] as List),
     );

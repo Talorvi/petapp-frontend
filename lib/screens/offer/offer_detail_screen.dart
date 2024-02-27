@@ -9,6 +9,8 @@ import 'package:petapp/screens/profile/profile_screen.dart';
 import 'package:petapp/services/api_service.dart';
 import 'package:petapp/storage/token_storage.dart';
 import 'package:petapp/widgets/offers_widget.dart';
+import 'package:petapp/widgets/reviews_view_widget.dart';
+import 'package:petapp/widgets/reviews_widget.dart';
 import 'package:petapp/widgets/user_profile_section.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -29,6 +31,7 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
   String? _loggedInUserId;
   final CarouselController _carouselController = CarouselController();
   int _currentCarouselPage = 0;
+  bool _needToRefresh = false;
 
   @override
   void initState() {
@@ -49,6 +52,14 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
       length: 2, // Number of tabs for details and reviews
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              // Custom back button action
+              Navigator.pop(context,
+                  _needToRefresh); // Pop with a flag indicating the need to refresh
+            },
+          ),
           title: Text(widget.offer.title.toUpperCase()),
           bottom: TabBar(
             tabs: [
@@ -213,9 +224,7 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
   }
 
   Widget _buildReviewsTab(BuildContext context) {
-    return const Center(
-      child: Text("Reviews will be implemented here"),
-    );
+    return ReviewsListWidget(offerId: widget.offer.id);
   }
 
   Widget _buildUserProfileSection(Offer offer) {
@@ -277,19 +286,22 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
         children: <Widget>[
           ElevatedButton(
             onPressed: () async {
-              await Navigator.push(
+              var result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => EditOfferScreen(
                             offer: widget.offer,
                           )));
+              if (!_needToRefresh) {
+                _needToRefresh = result ?? false;
+              }
               // Refresh the offers list after editing the offer
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (_offersWidgetKey.currentState != null) {
                   _offersWidgetKey.currentState!.refreshOffers();
                 }
               });
-              fetchUpdatedOffer(); 
+              fetchUpdatedOffer();
             },
             child:
                 Text(AppLocalizations.of(context)!.offerDetailScreen_editOffer),
@@ -331,12 +343,12 @@ class _OfferDetailScreenState extends State<OfferDetailScreen> {
                   await ApiService().deleteOffer(widget.offer.id);
                   Navigator.of(context).pop(); // Dismiss the loading dialog
                   Navigator.of(context)
-                      .pop(); // Close the detail screen and signal success
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (_offersWidgetKey.currentState != null) {
-                      _offersWidgetKey.currentState!.refreshOffers();
-                    }
-                  });
+                      .pop(true); // Close the detail screen and signal success
+                  // WidgetsBinding.instance.addPostFrameCallback((_) {
+                  //   if (_offersWidgetKey.currentState != null) {
+                  //     _offersWidgetKey.currentState!.refreshOffers();
+                  //   }
+                  // });
                 } catch (e) {
                   Navigator.of(context)
                       .pop(); // Ensure loading dialog is dismissed on error

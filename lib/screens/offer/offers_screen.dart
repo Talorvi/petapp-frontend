@@ -33,17 +33,20 @@ class _OffersScreenState extends State<OffersScreen>
   OrderOption _selectedOrder = OrderOption.desc;
 
   void navigateToAddOfferScreen() async {
-    await Navigator.push(
+    var result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const AddOfferScreen()),
     );
 
-    // Make sure this is called when the widget is built
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_offersWidgetKey.currentState != null) {
-        _offersWidgetKey.currentState!.refreshOffers();
-      }
-    });
+    print(result);
+
+    if (result) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_offersWidgetKey.currentState != null) {
+          _offersWidgetKey.currentState!.refreshOffers();
+        }
+      });
+    }
   }
 
   void _showAdvancedSearch(BuildContext context) {
@@ -192,7 +195,7 @@ class _OffersScreenState extends State<OffersScreen>
                         _sortBy = _selectedSort == SortOption.date
                             ? 'updated_at'
                             : _selectedSort == SortOption.rating
-                                ? 'rating'
+                                ? 'average_rating'
                                 : 'price';
                         _sortDirection =
                             _selectedOrder == OrderOption.asc ? 'asc' : 'desc';
@@ -220,7 +223,7 @@ class _OffersScreenState extends State<OffersScreen>
       _sortBy = _selectedSort == SortOption.date
           ? 'updated_at'
           : _selectedSort == SortOption.rating
-              ? 'rating'
+              ? 'average_rating'
               : 'price'; // Add this line
       _sortDirection = _selectedOrder == OrderOption.asc ? 'asc' : 'desc';
     });
